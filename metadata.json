@@ -1,0 +1,5 @@
+{
+  "name": "AI Exam Predictor",
+  "description": "Predict likely exam topics and questions using AI analysis of course materials.",
+  "requestFramePermissions": []
+}

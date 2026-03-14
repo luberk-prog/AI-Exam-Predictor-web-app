@@ -1,0 +1,153 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "A university course created by a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "university": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "ownerId"]
+    },
+    "UploadedFile": {
+      "title": "UploadedFile",
+      "description": "A file uploaded for a specific course.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "extractedText": { "type": "string" },
+        "courseId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "courseId", "ownerId"]
+    },
+    "ExamAnalysis": {
+      "title": "ExamAnalysis",
+      "description": "AI-generated analysis results for a course.",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string" },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "probability": { "type": "number" },
+              "priority": { "type": "string" },
+              "reasoning": { "type": "string" }
+            }
+          }
+        },
+        "repeatedQuestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "frequency": { "type": "number" }
+            }
+          }
+        },
+        "studyPriority": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["courseId", "topics"]
+    },
+    "PredictedQuestion": {
+      "title": "PredictedQuestion",
+      "description": "A specific exam question predicted by AI.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "question": { "type": "string" },
+        "explanation": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["courseId", "question"]
+    },
+    "StudyMaterial": {
+      "title": "StudyMaterial",
+      "description": "AI-generated study materials including notes, flashcards, and quizzes.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "topic": { "type": "string" },
+        "notes": { "type": "string" },
+        "flashcards": { "type": "array" },
+        "quiz": { "type": "array" },
+        "youtubeUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["courseId", "topic"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A message in the study chat.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "role": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["courseId", "role", "text"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles."
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Courses created by users."
+    },
+    "/courses/{courseId}/files/{fileId}": {
+      "schema": "UploadedFile",
+      "description": "Files uploaded to a course."
+    },
+    "/courses/{courseId}/analysis/latest": {
+      "schema": "ExamAnalysis",
+      "description": "Latest AI analysis for a course."
+    },
+    "/courses/{courseId}/questions/{questionId}": {
+      "schema": "PredictedQuestion",
+      "description": "Predicted questions for a course."
+    },
+    "/courses/{courseId}/studyMaterials/{materialId}": {
+      "schema": "StudyMaterial",
+      "description": "Study materials for a topic."
+    },
+    "/courses/{courseId}/chat/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Chat messages for a course."
+    }
+  }
+}
