@@ -81,14 +81,14 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-bold dark:text-white">Welcome back, {userProfile.displayName?.split(' ')[0]}</h1>
-          <p className="text-[#1a1a1a]/60 dark:text-white/60 font-sans">Manage your courses and predict your exams.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+        <div className="space-y-1">
+          <h1 className="text-3xl md:text-4xl font-bold dark:text-white">Welcome back, {userProfile.displayName?.split(' ')[0]}</h1>
+          <p className="text-sm md:text-base text-[#1a1a1a]/60 dark:text-white/60 font-sans">Manage your courses and predict your exams.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black px-6 py-3 rounded-full font-sans font-semibold flex items-center gap-2 hover:bg-[#333] dark:hover:bg-[#8A8A58] transition-all shadow-lg"
+          className="w-full sm:w-auto bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black px-6 py-3 rounded-full font-sans font-semibold flex items-center justify-center gap-2 hover:bg-[#333] dark:hover:bg-[#8A8A58] transition-all shadow-lg"
         >
           <Plus className="w-5 h-5" />
           New Course
@@ -96,31 +96,31 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
       </div>
 
       {courses.length === 0 ? (
-        <div className="bg-white dark:bg-black/40 rounded-[2rem] p-20 border border-dashed border-black/20 dark:border-white/20 text-center space-y-4 transition-colors">
-          <div className="w-16 h-16 bg-[#F5F5F0] dark:bg-white/5 rounded-full flex items-center justify-center mx-auto text-[#5A5A40] dark:text-[#A0A080]">
-            <BookOpen className="w-8 h-8" />
+        <div className="bg-white dark:bg-black/40 rounded-[2rem] p-12 md:p-20 border border-dashed border-black/20 dark:border-white/20 text-center space-y-4 transition-colors">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-[#F5F5F0] dark:bg-white/5 rounded-full flex items-center justify-center mx-auto text-[#5A5A40] dark:text-[#A0A080]">
+            <BookOpen className="w-6 h-6 md:w-8 md:h-8" />
           </div>
-          <h3 className="text-2xl font-bold">No courses yet</h3>
-          <p className="text-[#1a1a1a]/60 dark:text-white/60 font-sans max-w-xs mx-auto">
+          <h3 className="text-xl md:text-2xl font-bold">No courses yet</h3>
+          <p className="text-sm md:text-base text-[#1a1a1a]/60 dark:text-white/60 font-sans max-w-xs mx-auto">
             Create your first course to start analyzing materials and predicting exam topics.
           </p>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="text-[#5A5A40] dark:text-[#A0A080] font-bold font-sans hover:underline"
+            className="text-sm md:text-base text-[#5A5A40] dark:text-[#A0A080] font-bold font-sans hover:underline"
           >
             Create a course now →
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {courses.map((course) => (
             <motion.div
               layoutId={course.id}
               key={course.id}
               onClick={() => onSelectCourse(course.id)}
-              className="group bg-white dark:bg-black/40 p-8 rounded-[2rem] border border-black/5 dark:border-white/5 hover:border-[#5A5A40]/30 dark:hover:border-[#A0A080]/30 hover:shadow-xl transition-all cursor-pointer relative overflow-hidden"
+              className="group bg-white dark:bg-black/40 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-black/5 dark:border-white/5 hover:border-[#5A5A40]/30 dark:hover:border-[#A0A080]/30 hover:shadow-xl transition-all cursor-pointer relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute top-0 right-0 p-4 md:p-6 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                 <button 
                   onClick={(e) => handleDeleteCourse(e, course)}
                   className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400 rounded-full transition-colors"
@@ -130,19 +130,19 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
               </div>
               
               <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#F5F5F0] dark:bg-white/5 flex items-center justify-center text-[#5A5A40] dark:text-[#A0A080]">
-                  <GraduationCap className="w-6 h-6" />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-[#F5F5F0] dark:bg-white/5 flex items-center justify-center text-[#5A5A40] dark:text-[#A0A080]">
+                  <GraduationCap className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold group-hover:text-[#5A5A40] dark:group-hover:text-[#A0A080] transition-colors">{course.name}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold group-hover:text-[#5A5A40] dark:group-hover:text-[#A0A080] transition-colors">{course.name}</h3>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    <p className="text-[10px] font-sans font-bold uppercase tracking-widest bg-black/5 dark:bg-white/5 px-2 py-1 rounded-md opacity-60">{course.university}</p>
-                    <p className="text-[10px] font-sans font-bold uppercase tracking-widest bg-[#5A5A40]/10 dark:bg-[#A0A080]/20 text-[#5A5A40] dark:text-[#A0A080] px-2 py-1 rounded-md">L{course.level} S{course.semester}</p>
+                    <p className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-widest bg-black/5 dark:bg-white/5 px-2 py-1 rounded-md opacity-60">{course.university}</p>
+                    <p className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-widest bg-[#5A5A40]/10 dark:bg-[#A0A080]/20 text-[#5A5A40] dark:text-[#A0A080] px-2 py-1 rounded-md">L{course.level} S{course.semester}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-black/5 dark:border-white/5">
-                  <span className="text-sm font-sans opacity-60">View Analysis</span>
-                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  <span className="text-xs md:text-sm font-sans opacity-60">View Analysis</span>
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
             </motion.div>
@@ -153,7 +153,7 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
       {/* Create Course Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -165,31 +165,31 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative bg-white dark:bg-[#1a1a1a] rounded-[2.5rem] p-10 w-full max-w-lg shadow-2xl space-y-8 max-h-[90vh] overflow-y-auto transition-colors"
+              className="relative bg-white dark:bg-[#1a1a1a] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 w-full max-w-lg shadow-2xl space-y-6 md:space-y-8 max-h-[90vh] overflow-y-auto transition-colors"
             >
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold">Create New Course</h2>
-                <p className="text-[#1a1a1a]/60 dark:text-white/60 font-sans">Enter the details of the course you want to analyze.</p>
+                <h2 className="text-2xl md:text-3xl font-bold">Create New Course</h2>
+                <p className="text-sm md:text-base text-[#1a1a1a]/60 dark:text-white/60 font-sans">Enter the details of the course you want to analyze.</p>
               </div>
 
-              <form onSubmit={handleCreateCourse} className="space-y-6">
+              <form onSubmit={handleCreateCourse} className="space-y-4 md:space-y-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-sans font-bold uppercase tracking-wider opacity-50">Course Name</label>
+                  <label className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider opacity-50">Course Name</label>
                   <input 
                     autoFocus
                     type="text" 
                     value={newCourseName}
                     onChange={(e) => setNewCourseName(e.target.value)}
                     placeholder="e.g. Operating Systems"
-                    className="w-full p-4 rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans"
+                    className="w-full p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans text-sm md:text-base"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-sans font-bold uppercase tracking-wider opacity-50">University</label>
+                  <label className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider opacity-50">University</label>
                   <select 
                     value={newCourseUni}
                     onChange={(e) => setNewCourseUni(e.target.value)}
-                    className="w-full p-4 rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none"
+                    className="w-full p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none text-sm md:text-base"
                   >
                     {UNIVERSITIES.map(uni => (
                       <option key={uni} value={uni}>{uni}</option>
@@ -198,11 +198,11 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-sans font-bold uppercase tracking-wider opacity-50">Level</label>
+                    <label className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider opacity-50">Level</label>
                     <select 
                       value={newCourseLevel}
                       onChange={(e) => setNewCourseLevel(e.target.value)}
-                      className="w-full p-4 rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none"
+                      className="w-full p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none text-sm md:text-base"
                     >
                       {LEVELS.map(lvl => (
                         <option key={lvl} value={lvl}>{lvl}</option>
@@ -210,11 +210,11 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-sans font-bold uppercase tracking-wider opacity-50">Semester</label>
+                    <label className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-wider opacity-50">Semester</label>
                     <select 
                       value={newCourseSemester}
                       onChange={(e) => setNewCourseSemester(e.target.value)}
-                      className="w-full p-4 rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none"
+                      className="w-full p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F5F5F0] dark:bg-white/5 border border-black/5 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-[#5A5A40]/20 font-sans appearance-none text-sm md:text-base"
                     >
                       {SEMESTERS.map(sem => (
                         <option key={sem} value={sem}>{sem}</option>
@@ -222,17 +222,17 @@ export default function Dashboard({ userProfile, onSelectCourse }: { userProfile
                     </select>
                   </div>
                 </div>
-                <div className="flex gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4">
                   <button 
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="flex-1 px-6 py-4 rounded-full font-sans font-bold border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                    className="flex-1 px-6 py-3 md:py-4 rounded-full font-sans font-bold border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-all text-sm md:text-base"
                   >
                     Cancel
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-4 rounded-full font-sans font-bold bg-[#1a1a1a] dark:bg-white text-white dark:text-black hover:opacity-90 transition-all shadow-lg"
+                    className="flex-1 px-6 py-3 md:py-4 rounded-full font-sans font-bold bg-[#1a1a1a] dark:bg-white text-white dark:text-black hover:opacity-90 transition-all shadow-lg text-sm md:text-base"
                   >
                     Create Course
                   </button>

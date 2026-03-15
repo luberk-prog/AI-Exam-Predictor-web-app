@@ -9,6 +9,8 @@ import CourseAnalysis from './components/CourseAnalysis';
 import ProfileModal from './components/ProfileModal';
 import SampleAnalysisModal from './components/SampleAnalysisModal';
 import LegalPage from './components/LegalPages';
+import AboutPage from './components/AboutPage';
+import AuthModal from './components/AuthModal';
 import { Sun, Moon, LogOut, GraduationCap, User as UserIcon, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -28,7 +30,9 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'landing' | 'dashboard' | 'analysis' | 'privacy' | 'terms'>('landing');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [currentView, setCurrentView] = useState<'landing' | 'dashboard' | 'analysis' | 'privacy' | 'terms' | 'about'>('landing');
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -111,36 +115,36 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-[#F5F5F0] dark:bg-[#0a0a0a] text-[#1a1a1a] dark:text-[#f5f5f5] font-serif transition-colors">
       {/* Navigation */}
-      <nav className="border-b border-black/10 dark:border-white/10 px-6 py-4 flex justify-between items-center bg-white/50 dark:bg-black/50 backdrop-blur-md sticky top-0 z-50 transition-colors">
+      <nav className="border-b border-black/10 dark:border-white/10 px-4 md:px-6 py-4 flex justify-between items-center bg-white/50 dark:bg-black/50 backdrop-blur-md sticky top-0 z-50 transition-colors">
         <div 
           className="flex items-center gap-2 cursor-pointer" 
           onClick={() => setCurrentView(user ? 'dashboard' : 'landing')}
         >
-          <GraduationCap className="w-8 h-8 text-[#5A5A40] dark:text-[#A0A080]" />
-          <span className="text-xl font-bold tracking-tight">AI Exam Predictor</span>
+          <GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-[#5A5A40] dark:text-[#A0A080]" />
+          <span className="text-lg md:text-xl font-bold tracking-tight truncate max-w-[150px] md:max-w-none">AI Exam Predictor</span>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors"
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? <Sun className="w-4 h-4 md:w-5 md:h-5" /> : <Moon className="w-4 h-4 md:w-5 md:h-5" />}
           </button>
 
           {user ? (
             <>
               <div 
-                className="flex items-center gap-2 px-3 py-1 rounded-full border border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/50 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                className="flex items-center gap-2 px-2 md:px-3 py-1 rounded-full border border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/50 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
                 onClick={() => setIsProfileModalOpen(true)}
               >
                 {userProfile?.photoURL ? (
-                  <img src={userProfile.photoURL} alt="" className="w-6 h-6 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={userProfile.photoURL} alt="" className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
-                  <UserIcon className="w-4 h-4" />
+                  <UserIcon className="w-3 h-3 md:w-4 md:h-4" />
                 )}
-                <span className="text-sm font-sans">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
+                <span className="text-xs md:text-sm font-sans hidden sm:inline">{userProfile?.displayName?.split(' ')[0] || 'User'}</span>
                 <Settings className="w-3 h-3 opacity-40" />
               </div>
               <button 
@@ -148,13 +152,16 @@ function AppContent() {
                 className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors"
                 title="Logout"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4 md:w-5 md:h-5" />
               </button>
             </>
           ) : (
             <button 
-              onClick={signInWithGoogle}
-              className="bg-[#5A5A40] dark:bg-[#A0A080] text-white dark:text-black px-6 py-2 rounded-full font-sans text-sm font-medium hover:opacity-90 transition-all shadow-sm"
+              onClick={() => {
+                setAuthMode('signin');
+                setIsAuthModalOpen(true);
+              }}
+              className="bg-[#5A5A40] dark:bg-[#A0A080] text-white dark:text-black px-4 md:px-6 py-2 rounded-full font-sans text-xs md:text-sm font-medium hover:opacity-90 transition-all shadow-sm"
             >
               Sign In
             </button>
@@ -162,7 +169,7 @@ function AppContent() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
         <AnimatePresence mode="wait">
           {currentView === 'landing' && (
             <motion.div
@@ -172,7 +179,10 @@ function AppContent() {
               exit={{ opacity: 0, y: -20 }}
             >
               <LandingPage 
-                onStart={signInWithGoogle} 
+                onStart={() => {
+                  setAuthMode('signup');
+                  setIsAuthModalOpen(true);
+                }} 
                 onViewSample={() => setIsSampleModalOpen(true)}
               />
             </motion.div>
@@ -216,6 +226,19 @@ function AppContent() {
               />
             </motion.div>
           )}
+
+          {currentView === 'about' && (
+            <motion.div
+              key="about"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <AboutPage 
+                onBack={() => setCurrentView(user ? 'dashboard' : 'landing')} 
+              />
+            </motion.div>
+          )}
         </AnimatePresence>
       </main>
 
@@ -233,13 +256,20 @@ function AppContent() {
         onClose={() => setIsSampleModalOpen(false)}
       />
 
-      <footer className="border-t border-black/10 dark:border-white/10 py-12 px-6 mt-20 transition-colors">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2 opacity-50 dark:text-white/60">
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authMode}
+      />
+
+      <footer className="border-t border-black/10 dark:border-white/10 py-8 md:py-12 px-4 md:px-6 mt-12 md:mt-20 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-2 opacity-50 dark:text-white/60 text-center md:text-left">
             <GraduationCap className="w-5 h-5" />
-            <span className="text-sm font-sans">© 2026 AI Exam Predictor. Built for GCTU Students.</span>
+            <span className="text-xs md:text-sm font-sans">© 2026 AI Exam Predictor. Built for GCTU Students.</span>
           </div>
-          <div className="flex gap-8 text-sm font-sans opacity-50 dark:text-white/60">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-xs md:text-sm font-sans opacity-50 dark:text-white/60">
+            <button onClick={() => setCurrentView('about')} className="hover:opacity-100 transition-opacity">About</button>
             <button onClick={() => setCurrentView('privacy')} className="hover:opacity-100 transition-opacity">Privacy Policy</button>
             <button onClick={() => setCurrentView('terms')} className="hover:opacity-100 transition-opacity">Terms of Service</button>
             <a href="mailto:support@aiexampredictor.com" className="hover:opacity-100 transition-opacity">Contact</a>

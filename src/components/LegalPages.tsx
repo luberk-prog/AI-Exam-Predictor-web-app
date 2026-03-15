@@ -22,38 +22,38 @@ export default function LegalPage({ onBack, type }: LegalPageProps) {
   const content: LegalContent = type === 'privacy' ? privacyContent : termsContent;
 
   return (
-    <div className="max-w-4xl mx-auto py-12 space-y-12">
+    <div className="max-w-4xl mx-auto py-6 md:py-12 px-4 md:px-6 space-y-8 md:space-y-12">
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-[#5A5A40] dark:text-[#A8A878] font-sans font-bold hover:opacity-70 transition-opacity"
+        className="flex items-center gap-2 text-[#5A5A40] dark:text-[#A8A878] font-sans font-bold hover:opacity-70 transition-opacity text-sm md:text-base"
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
         Back to App
       </button>
 
-      <div className="space-y-4">
-        <div className="w-16 h-16 bg-[#5A5A40]/10 dark:bg-[#A8A878]/10 rounded-2xl flex items-center justify-center text-[#5A5A40] dark:text-[#A8A878]">
-          {type === 'privacy' ? <Shield className="w-8 h-8" /> : <FileText className="w-8 h-8" />}
+      <div className="space-y-3 md:space-y-4">
+        <div className="w-12 h-12 md:w-16 md:h-16 bg-[#5A5A40]/10 dark:bg-[#A8A878]/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#5A5A40] dark:text-[#A8A878]">
+          {type === 'privacy' ? <Shield className="w-6 h-6 md:w-8 md:h-8" /> : <FileText className="w-6 h-6 md:w-8 md:h-8" />}
         </div>
-        <h1 className="text-5xl font-bold dark:text-white">{content.title}</h1>
-        <p className="text-sm font-sans opacity-50 dark:text-white/60 uppercase tracking-widest">Last Updated: March 14, 2026</p>
+        <h1 className="text-3xl md:text-5xl font-bold dark:text-white leading-tight">{content.title}</h1>
+        <p className="text-[10px] md:text-sm font-sans opacity-50 dark:text-white/60 uppercase tracking-widest">Last Updated: March 14, 2026</p>
       </div>
 
-      <div className="prose prose-slate dark:prose-invert max-w-none font-sans space-y-8">
+      <div className="prose prose-slate dark:prose-invert max-w-none font-sans space-y-6 md:space-y-8">
         {content.sections.map((section, idx) => (
-          <section key={idx} className="space-y-4">
-            <h2 className="text-2xl font-bold dark:text-white flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center text-sm">
+          <section key={idx} className="space-y-3 md:space-y-4">
+            <h2 className="text-xl md:text-2xl font-bold dark:text-white flex items-center gap-3">
+              <span className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center text-xs md:text-sm">
                 {idx + 1}
               </span>
               {section.title}
             </h2>
-            <div className="text-[#1a1a1a]/70 dark:text-white/70 leading-relaxed space-y-4">
+            <div className="text-sm md:text-base text-[#1a1a1a]/70 dark:text-white/70 leading-relaxed space-y-3 md:space-y-4">
               {section.content.map((paragraph, pIdx) => (
                 <p key={pIdx}>{paragraph}</p>
               ))}
               {section.list && (
-                <ul className="list-disc pl-6 space-y-2">
+                <ul className="list-disc pl-5 md:pl-6 space-y-1.5 md:space-y-2">
                   {section.list.map((item, iIdx) => (
                     <li key={iIdx}>{item}</li>
                   ))}
@@ -64,11 +64,11 @@ export default function LegalPage({ onBack, type }: LegalPageProps) {
         ))}
       </div>
 
-      <div className="p-8 bg-[#5A5A40]/5 dark:bg-[#A8A878]/5 rounded-[2rem] border border-[#5A5A40]/10 dark:border-[#A8A878]/10 text-center space-y-4">
-        <AlertCircle className="w-8 h-8 mx-auto text-[#5A5A40] dark:text-[#A8A878]" />
-        <h3 className="text-xl font-bold dark:text-white">Questions about our {type === 'privacy' ? 'Privacy Policy' : 'Terms'}?</h3>
-        <p className="text-sm font-sans opacity-60 dark:text-white/60">
-          If you have any questions or concerns, please contact us at <br />
+      <div className="p-6 md:p-8 bg-[#5A5A40]/5 dark:bg-[#A8A878]/5 rounded-2xl md:rounded-[2rem] border border-[#5A5A40]/10 dark:border-[#A8A878]/10 text-center space-y-3 md:space-y-4">
+        <AlertCircle className="w-6 h-6 md:w-8 md:h-8 mx-auto text-[#5A5A40] dark:text-[#A8A878]" />
+        <h3 className="text-lg md:text-xl font-bold dark:text-white">Questions about our {type === 'privacy' ? 'Privacy Policy' : 'Terms'}?</h3>
+        <p className="text-xs md:text-sm font-sans opacity-60 dark:text-white/60 leading-relaxed">
+          If you have any questions or concerns, please contact us at <br className="hidden md:block" />
           <a href="mailto:support@aiexampredictor.com" className="font-bold text-[#5A5A40] dark:text-[#A8A878] hover:underline">support@aiexampredictor.com</a>
         </p>
       </div>

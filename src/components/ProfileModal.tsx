@@ -87,10 +87,10 @@ export default function ProfileModal({ isOpen, onClose, profile, onUpdate }: Pro
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white dark:bg-[#1a1a1a] w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-black/5 dark:border-white/10"
+            className="bg-white dark:bg-[#1a1a1a] w-full max-w-md rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden border border-black/5 dark:border-white/10 m-4"
           >
-            <div className="p-6 border-b border-black/5 dark:border-white/10 flex justify-between items-center">
-              <h2 className="text-xl font-bold dark:text-white">Edit Profile</h2>
+            <div className="p-4 md:p-6 border-b border-black/5 dark:border-white/10 flex justify-between items-center">
+              <h2 className="text-lg md:text-xl font-bold dark:text-white">Edit Profile</h2>
               <button 
                 onClick={onClose}
                 className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors dark:text-white/60"
@@ -99,29 +99,29 @@ export default function ProfileModal({ isOpen, onClose, profile, onUpdate }: Pro
               </button>
             </div>
 
-            <div className="p-8 space-y-6">
+            <div className="p-6 md:p-8 space-y-6">
               {/* Profile Picture */}
               <div className="flex flex-col items-center gap-4">
                 <div className="relative group">
-                  <div className="relative w-24 h-24">
+                  <div className="relative w-20 h-20 md:w-24 md:h-24">
                     <img 
                       src={photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=5A5A40&color=fff`} 
                       alt="Profile" 
-                      className={`w-24 h-24 rounded-full object-cover border-4 border-[#5A5A40]/10 transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`}
+                      className={`w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-[#5A5A40]/10 transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`}
                       referrerPolicy="no-referrer"
                     />
                     {isUploading && (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 text-[#5A5A40] animate-spin" />
+                        <Loader2 className="w-6 h-6 md:w-8 md:h-8 text-[#5A5A40] animate-spin" />
                       </div>
                     )}
                   </div>
                   <button 
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="absolute bottom-0 right-0 p-2 bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black rounded-full shadow-lg hover:scale-110 transition-transform disabled:opacity-50"
+                    className="absolute bottom-0 right-0 p-1.5 md:p-2 bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black rounded-full shadow-lg hover:scale-110 transition-transform disabled:opacity-50"
                   >
-                    <Camera className="w-4 h-4" />
+                    <Camera className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </button>
                   <input 
                     type="file"
@@ -132,8 +132,8 @@ export default function ProfileModal({ isOpen, onClose, profile, onUpdate }: Pro
                   />
                 </div>
                 
-                <div className="w-full space-y-2">
-                  <label className="text-xs font-sans font-semibold uppercase tracking-wider text-black/40 dark:text-white/40">
+                <div className="w-full space-y-1.5 md:space-y-2">
+                  <label className="text-[10px] md:text-xs font-sans font-semibold uppercase tracking-wider text-black/40 dark:text-white/40">
                     Profile Picture URL
                   </label>
                   <div className="relative">
@@ -142,15 +142,15 @@ export default function ProfileModal({ isOpen, onClose, profile, onUpdate }: Pro
                       value={photoURL}
                       onChange={(e) => setPhotoURL(e.target.value)}
                       placeholder="https://example.com/photo.jpg"
-                      className="w-full px-4 py-3 rounded-xl bg-[#F5F5F0] dark:bg-white/5 border-none focus:ring-2 focus:ring-[#5A5A40] dark:text-white font-sans text-sm"
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl bg-[#F5F5F0] dark:bg-white/5 border-none focus:ring-2 focus:ring-[#5A5A40] dark:text-white font-sans text-xs md:text-sm"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Display Name */}
-              <div className="space-y-2">
-                <label className="text-xs font-sans font-semibold uppercase tracking-wider text-black/40 dark:text-white/40">
+              <div className="space-y-1.5 md:space-y-2">
+                <label className="text-[10px] md:text-xs font-sans font-semibold uppercase tracking-wider text-black/40 dark:text-white/40">
                   Full Name
                 </label>
                 <input
@@ -158,24 +158,24 @@ export default function ProfileModal({ isOpen, onClose, profile, onUpdate }: Pro
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="Your Name"
-                  className="w-full px-4 py-3 rounded-xl bg-[#F5F5F0] dark:bg-white/5 border-none focus:ring-2 focus:ring-[#5A5A40] dark:text-white font-sans text-sm"
+                  className="w-full px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl bg-[#F5F5F0] dark:bg-white/5 border-none focus:ring-2 focus:ring-[#5A5A40] dark:text-white font-sans text-xs md:text-sm"
                 />
               </div>
 
               {error && (
-                <p className="text-sm text-red-500 font-sans text-center">{error}</p>
+                <p className="text-xs md:text-sm text-red-500 font-sans text-center">{error}</p>
               )}
 
               <button
                 onClick={handleSave}
                 disabled={isSaving || isUploading}
-                className="w-full bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black py-4 rounded-xl font-sans font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-all disabled:opacity-50"
+                className="w-full bg-[#1a1a1a] dark:bg-[#A8A878] text-white dark:text-black py-3 md:py-4 rounded-lg md:rounded-xl font-sans font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-all disabled:opacity-50 text-sm md:text-base"
               >
                 {isSaving ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    <Save className="w-5 h-5" />
+                    <Save className="w-4 h-4 md:w-5 md:h-5" />
                     Save Changes
                   </>
                 )}

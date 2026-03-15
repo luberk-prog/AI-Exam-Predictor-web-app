@@ -28,18 +28,18 @@ export default function FileUpload({ onFilesAdded, files, onRemoveFile, label, d
       <div 
         {...getRootProps()} 
         className={`
-          border-2 border-dashed rounded-[2rem] p-8 text-center transition-all cursor-pointer
+          border-2 border-dashed rounded-2xl md:rounded-[2rem] p-6 md:p-8 text-center transition-all cursor-pointer
           ${isDragActive ? 'border-[#5A5A40] dark:border-[#A8A878] bg-[#5A5A40]/5 dark:bg-[#A8A878]/5' : 'border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 bg-white dark:bg-white/5'}
         `}
       >
         <input {...getInputProps()} />
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 bg-[#F5F5F0] dark:bg-white/10 rounded-full flex items-center justify-center text-[#5A5A40] dark:text-[#A8A878]">
-            {icon || <Upload className="w-6 h-6" />}
+        <div className="flex flex-col items-center gap-3 md:gap-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-[#F5F5F0] dark:bg-white/10 rounded-full flex items-center justify-center text-[#5A5A40] dark:text-[#A8A878]">
+            {icon || <Upload className="w-5 h-5 md:w-6 md:h-6" />}
           </div>
           <div>
-            <h3 className="text-lg font-bold dark:text-white">{label || 'Upload Course Materials'}</h3>
-            <p className="text-xs font-sans opacity-50 mt-1 dark:text-white/60">
+            <h3 className="text-base md:text-lg font-bold dark:text-white">{label || 'Upload Course Materials'}</h3>
+            <p className="text-[10px] md:text-xs font-sans opacity-50 mt-1 dark:text-white/60">
               {description || 'Drag & drop files here. Supports PDF, DOCX, PPTX, TXT.'}
             </p>
           </div>
