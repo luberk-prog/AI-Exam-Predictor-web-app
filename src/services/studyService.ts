@@ -1,9 +1,6 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { db, handleFirestoreError, OperationType } from "../firebase";
-import { collection, addDoc, query, where, getDocs, orderBy, limit } from "firebase/firestore";
-import { StudyMaterial, Flashcard, QuizQuestion, ChatMessage } from "../types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+import { collection, addDoc } from "firebase/firestore";
+import { StudyMaterial, ChatMessage } from "../types";
 
 export async function generateStudyMaterial(
   courseId: string, 
@@ -13,72 +10,20 @@ export async function generateStudyMaterial(
   difficulty: string = 'Medium'
 ): Promise<StudyMaterial> {
   try {
-    const prompt = `
-      You are an expert academic tutor. Based on the following topic and context from past exam papers, generate a comprehensive study package.
-      
-      Topic: ${topic}
-      Context: ${context}
-      Difficulty Level: ${difficulty}
-      Target Number of Flashcards: ${count}
-      Target Number of Quiz Questions: ${count}
-      
-      The package must include:
-      1. Short, concise study notes (Markdown format).
-      2. Exactly ${count} Flashcards (Front/Back) tailored to ${difficulty} difficulty.
-      3. Exactly ${count} multiple choice quiz questions with explanations tailored to ${difficulty} difficulty.
-      4. A specific, high-quality YouTube video recommendation (Title and URL) that is best for learning this topic.
-      
-      Return the data in the specified JSON format.
-    `;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            notes: { type: Type.STRING },
-            flashcards: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  front: { type: Type.STRING },
-                  back: { type: Type.STRING }
-                },
-                required: ["front", "back"]
-              }
-            },
-            quiz: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  question: { type: Type.STRING },
-                  options: { type: Type.ARRAY, items: { type: Type.STRING } },
-                  correctAnswer: { type: Type.STRING },
-                  explanation: { type: Type.STRING }
-                },
-                required: ["question", "options", "correctAnswer", "explanation"]
-              }
-            },
-            youtubeVideo: {
-              type: Type.OBJECT,
-              properties: {
-                title: { type: Type.STRING },
-                url: { type: Type.STRING }
-              },
-              required: ["title", "url"]
-            }
-          },
-          required: ["notes", "flashcards", "quiz", "youtubeVideo"]
-        }
-      }
+    const apiResponse = await fetch("/api/generate-study-material", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ topic, context, difficulty, count })
     });
 
-    const data = JSON.parse(response.text);
+    if (!apiResponse.ok) {
+      const errData = await apiResponse.json().catch(() => ({}));
+      throw new Error(errData.error || `Server error: ${apiResponse.statusText}`);
+    }
+
+    const data = await apiResponse.json();
     
     const material: Omit<StudyMaterial, 'id'> = {
       courseId,
@@ -111,22 +56,26 @@ export async function sendChatMessage(courseId: string, text: string, history: C
     };
     await addDoc(collection(db, 'courses', courseId, 'chat'), userMsg);
 
-    // Generate AI response
-    const chat = ai.chats.create({
-      model: "gemini-3.1-pro-preview",
-      config: {
-        systemInstruction: "You are a helpful academic assistant for GCTU students. Answer questions based on the course materials and exam predictions provided. Be concise and accurate."
-      }
+    // Generate AI response via proxy
+    const apiResponse = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
     });
 
-    // We could pass history here if needed, but for simplicity we'll just send the current message
-    // or a limited history.
-    const response = await chat.sendMessage({ message: text });
+    if (!apiResponse.ok) {
+      const errData = await apiResponse.json().catch(() => ({}));
+      throw new Error(errData.error || `Server error: ${apiResponse.statusText}`);
+    }
+
+    const data = await apiResponse.json();
     
     const aiMsg: Omit<ChatMessage, 'id'> = {
       courseId,
       role: 'model',
-      text: response.text,
+      text: data.text,
       createdAt: new Date().toISOString()
     };
     
@@ -137,3 +86,4 @@ export async function sendChatMessage(courseId: string, text: string, history: C
     throw error;
   }
 }
+
