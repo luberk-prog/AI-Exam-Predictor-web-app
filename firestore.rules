@@ -1,105 +1,18 @@
-// ===============================================================
-// Assumed Data Model
-// ===============================================================
-//
-// Collection: users
-// Document ID: {userId} (matches Firebase Auth UID)
-// Fields:
-//   - uid: string (required)
-//   - email: string (required)
-//   - displayName: string (optional)
-//   - photoURL: string (optional)
-//   - createdAt: string (required, ISO 8601)
-//
-// Collection: courses
-// Document ID: {courseId} (auto-generated)
-// Fields:
-//   - name: string (required)
-//   - university: string (required)
-//   - ownerId: string (required, matches author UID)
-//   - createdAt: string (required, ISO 8601)
-//
-// Collection: courses/{courseId}/files
-// Fields: name, type, extractedText, courseId, ownerId, createdAt
-//
-// Collection: courses/{courseId}/analysis
-// Fields: topics, repeatedQuestions, studyPriority, updatedAt
-//
-// Collection: courses/{courseId}/questions
-// Fields: question, explanation, createdAt
-//
-// ===============================================================
+rules_version='2'
 
-rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // ===============================================================
-    // Helper Functions
-    // ===============================================================
-    
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-    
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-    
-    function getCourse(courseId) {
-      return get(/databases/$(database)/documents/courses/$(courseId)).data;
-    }
-    
-    function isCourseOwner(courseId) {
-      return isAuthenticated() && getCourse(courseId).ownerId == request.auth.uid;
-    }
-
-    // ===============================================================
-    // Rules
-    // ===============================================================
-
-    // User Profiles
-    match /users/{userId} {
-      // Allow users to read any profile (for sharing/collaboration later)
-      // but only write their own.
-      allow read: if isAuthenticated();
-      allow write: if isOwner(userId);
-    }
-
-    // Courses
-    match /courses/{courseId} {
-      // Allow reading if the user is the owner.
-      // For list queries, the query must filter by ownerId.
-      allow read: if isAuthenticated() && (resource == null || resource.data.ownerId == request.auth.uid);
-      
-      // Allow creation if the user sets themselves as owner.
-      allow create: if isAuthenticated() && request.resource.data.ownerId == request.auth.uid;
-      
-      // Allow update/delete only for the owner.
-      allow update, delete: if isAuthenticated() && resource.data.ownerId == request.auth.uid;
-      
-      // Subcollections
-      // We use isCourseOwner which performs a 'get' on the parent course document.
-      
-      match /files/{fileId} {
-        allow read, write: if isCourseOwner(courseId);
-      }
-      
-      match /analysis/{docId} {
-        allow read, write: if isCourseOwner(courseId);
-      }
-      
-      match /questions/{questionId} {
-        allow read, write: if isCourseOwner(courseId);
-      }
-
-      match /studyMaterials/{materialId} {
-        allow read, write: if isCourseOwner(courseId);
-      }
-
-      match /chat/{messageId} {
-        allow read, write: if isCourseOwner(courseId);
-      }
+    match /{document=**} {
+      // This rule allows anyone with your database reference to view, edit,
+      // and delete all data in your database. It is useful for getting
+      // started, but it is configured to expire after 30 days because it
+      // leaves your app open to attackers. At that time, all client
+      // requests to your database will be denied.
+      //
+      // Make sure to write security rules for your app before that time, or
+      // else all client requests to your database will be denied until you
+      // update your rules.
+      allow read, write: if request.time < timestamp.date(2026, 9, 18);
     }
   }
 }
